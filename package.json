@@ -13,5 +13,11 @@
     "ejs": "^2.5.5",
     "express": "^4.14.1",
     "mysql": "^2.13.0"
+  },
+  "devDependencies": {
+    "connect-flash": "^0.1.1",
+    "express-session": "^1.15.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }
