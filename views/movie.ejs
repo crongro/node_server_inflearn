@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>movie list</title>
+        <link rel="stylesheet" href="/css/ui.css">
+    </head>
+    <body>
+
+    <h1>movie list</h1>
+
+    <section class="showWrap">
+        <ul>
+            <li class="get_all">
+                <button>모든영화보기</button>
+                <section class="showResult"></section>
+            </li>
+
+            <li class="post">
+                <form action="" method="post">
+                   <div> 제목 : <input type="text" name="title" placeholder="Terminator"> </div>
+                   <div> 장르 : <input type="text" name="type" placeholder="drama"> </div>
+                   <div> 평점 : <input type="text" name="grade" placeholder="8.43"> </div>
+                   <div> 주연 : <input type="text" name="actor" placeholder="Tom cruise"> </div>
+                </form>
+                <button>영화추가</button>
+                <section class="showResult"></section>
+            </li>
+
+            <li class="get_id">
+                <input type="text" name="title">
+                <button>영화상세정보</button>
+                <section class="showResult"></section>
+            </li>
+
+            <li class="delete_id">
+                <input type="text" name="title">
+                <button>영화삭제</button>
+                <section class="showResult"></section>
+                
+            </li>
+
+            <li class="update_id">
+                <form action="" method="post">
+                   <div> 제목 : <input type="text" name="title" placeholder="Terminator"> </div>
+                   <div> 장르 : <input type="text" name="type"  placeholder="drama"> </div>
+                   <div> 평점 : <input type="text" name="grade" placeholder="8.43"> </div>
+                   <div> 주연 : <input type="text" name="actor" placeholder="Tom cruise"> </div>
+                </form>
+                <button>영화정보갱신</button>
+                <section class="showResult">ㅁㅁ</section>
+            </li>
+
+            <li class="get_min">
+                <button>현재 상영중인영화</button>
+                <section class="showResult">aaa</section>
+            </li>
+        </ul>
+    </section>
+
+
+    <script>
+        document.querySelector('.showWrap').addEventListener('click', function(e) {
+            let url, method, data;
+            const target = e.target;
+            const li = target.closest('LI');
+            const showResult = li.querySelector(".showResult");
+            const type = li.className;
+
+            if(target.tagName !== "BUTTON") return;
+
+            switch (type) {
+                case "get_all":
+                    url = "/movie";
+                    method = "GET";
+                    break;
+                case "post":
+                    url = "/movie";
+                    method = "POST";
+                    let inputs = [].slice.call(document.querySelector("form").elements);
+                    data = inputs.reduce(function(pre,next) {
+                        pre[next.name] = next.value;
+                        return pre;
+                    }, {});
+                    break;
+                default:
+                    // statements_def
+                    console.log("default");
+                    break;
+            }
+            sendAjax('http://localhost:3000/movie', method, data, showResult);
+        })
+
+        //@data : json format.
+        function sendAjax(url, method, data, resultEle){ 
+
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+
+            if(data) {
+                data = JSON.stringify(data);
+                xhr.setRequestHeader('Content-Type', "application/json");
+            } else { 
+                data = null;
+            }
+
+            xhr.send(data);
+
+            xhr.addEventListener('load', function() {
+                const result = JSON.parse(xhr.responseText);
+
+                if(result.result === 1) {
+                   let titles = result.data.reduce(function(pre,next){
+                        pre += "<li>" + next.title + "</li>"
+                        return pre;
+                   },"");
+                   resultEle.innerHTML = "<ul>" + titles + "</ul>";
+                } else { 
+                   resultEle.innerHTML = "list not found";
+                }
+            });
+        }
+    </script>
+
+    </body>
+</html>
