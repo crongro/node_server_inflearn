@@ -63,7 +63,7 @@
 
     <script>
         document.querySelector('.showWrap').addEventListener('click', function(e) {
-            let url, method, data;
+            let url, method, data, fn;
             const target = e.target;
             const li = target.closest('LI');
             const showResult = li.querySelector(".showResult");
@@ -75,6 +75,17 @@
                 case "get_all":
                     url = "/movie";
                     method = "GET";
+                    fn = function(result) {
+                        if(result.result === 1) {
+                            let titles = result.data.reduce(function(pre,next){
+                                pre += "<li>" + next.title + "</li>"
+                                return pre;
+                            },"");
+                            showResult.innerHTML = "<ul>" + titles + "</ul>";
+                        } else { 
+                         showResult.innerHTML = "list not found";
+                        } 
+                    }
                     break;
                 case "post":
                     url = "/movie";
@@ -84,17 +95,43 @@
                         pre[next.name] = next.value;
                         return pre;
                     }, {});
+                    fn = function (result) {
+                        if(result.result === 1) showResult.innerHTML = "새로운 영화 데이터가 잘 추가됐습니다.";
+                        else showResult.innerHTML = "list not found";
+                    }
+                    break;
+                case "get_id":
+                    url = "/movie/"+li.getElementsByTagName("input")[0].value;
+                    method = "GET";
+                    fn = function(result) {
+                        if(result.result === 1) {
+                            showResult.innerHTML = result.data[0].actor;
+                        }else {
+                            showResult.innerHTML = "해당하는 영화가 없네요..";
+                        }
+                    }
+                    break;
+                case "delete_id":
+                    url = "/movie/"+li.getElementsByTagName("input")[0].value;
+                    method = "DELETE";
+                    fn = function(result) {
+                        if(result.result === 1) {
+                            showResult.innerHTML = "선택한영화" + result.data+ "가 잘 삭제됐습니다";
+                        }else{
+                            showResult.innerText = "해당영화가 없습니다";
+                        }
+                    }
                     break;
                 default:
                     // statements_def
                     console.log("default");
                     break;
             }
-            sendAjax('http://localhost:3000/movie', method, data, showResult);
+            sendAjax(url, method, data, fn);
         })
 
         //@data : json format.
-        function sendAjax(url, method, data, resultEle){ 
+        function sendAjax(url, method, data, fn){ 
 
             const xhr = new XMLHttpRequest();
             xhr.open(method, url);
@@ -110,20 +147,7 @@
 
             xhr.addEventListener('load', function() {
                 const result = JSON.parse(xhr.responseText);
-
-                if(result.result === 1) {
-                    if(!result.data) {
-                        resultEle.innerHTML = "새로운 영화 데이터가 잘 추가됐습니다.";
-                    } else {
-                     let titles = result.data.reduce(function(pre,next){
-                        pre += "<li>" + next.title + "</li>"
-                        return pre;
-                    },"");
-                     resultEle.innerHTML = "<ul>" + titles + "</ul>";
-                }
-             } else { 
-                   resultEle.innerHTML = "list not found";
-                }
+                fn(result);
             });
         }
     </script>
