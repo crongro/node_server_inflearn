@@ -11,8 +11,11 @@ var movie = require('./movie/index')
 
 //url routing
 router.get('/', function(req,res) {
-	res.sendFile(path.join(__dirname , '../public/main.html'))
+	//var id = req.user;
+	if(!req.user) res.render('login.ejs');
+	else res.render('main.ejs', {'id' : id});
 });
+
 router.use('/main', main)
 router.use('/email', email)
 router.use('/join', join)

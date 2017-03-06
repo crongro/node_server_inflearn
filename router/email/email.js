@@ -17,7 +17,6 @@ connection.connect()
 
 //Router !!
 router.post('/form', function(req,res) {
-	console.log(req.body.email)
 	res.render('email.ejs', {'email' : req.body.email})
 })
 
