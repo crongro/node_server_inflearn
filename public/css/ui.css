@@ -11,6 +11,21 @@ h1 {
 }
 
 
+/* main  */
+header {
+    margin: 30px;
+    overflow: auto;
+}
+header > div {
+    float : left;
+    margin-right: 20px;
+}
+section.content {
+    margin: 30px;
+    }
+
+
+/* login */
 .formWrap {
     width: 350px;
     overflow: auto;
@@ -56,6 +71,8 @@ input {
 
 .signup {
     margin-top: 6px;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
 // movie area

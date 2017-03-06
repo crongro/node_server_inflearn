@@ -16,6 +16,8 @@ var connection = mysql.createConnection({
 connection.connect()
 
 router.get('/list', function(req,res) {
+	var id = req.user;
+	if(!id) res.render('login.ejs');
 	res.render('movie.ejs');
 })
 
@@ -26,7 +28,6 @@ router.get('/', function(req,res) {
 	var query = connection.query('select title from movie', function(err, rows) {
 		if(err) throw err;
 		if(rows.length) {
-			console.log(rows);
 			responseData.result = 1;
 			responseData.data = rows;
 		} else {
@@ -90,29 +91,5 @@ router.delete('/:title', function(req,res) {
 	})	
 })
 
-
-// //Router !!
-// router.post('/form', function(req,res) {
-// 	console.log(req.body.email)
-// 	res.render('email.ejs', {'email' : req.body.email})
-// })
-
-// router.post('/ajax', function(req, res){
-// 	var email = req.body.email;
-// 	var responseData = {};
-
-// 	var query = connection.query('select name from user where email="' + email + '"', function(err, rows) {
-// 		if(err) throw err;
-// 		if(rows[0]) {
-// 			console.log(rows);
-// 			responseData.result = "ok";
-// 			responseData.name= rows[0].name;
-// 		} else {
-// 			responseData.result = "none";
-// 			responseData.name= "";
-// 		}
-// 		res.json(responseData)
-// 	})
-// })
 
 module.exports = router;

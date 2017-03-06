@@ -11,7 +11,7 @@ var movie = require('./movie/index')
 
 //url routing
 router.get('/', function(req,res) {
-	//var id = req.user;
+	var id = req.user;
 	if(!req.user) res.render('login.ejs');
 	else res.render('main.ejs', {'id' : id});
 });

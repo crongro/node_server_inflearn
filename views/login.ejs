@@ -21,8 +21,9 @@
     	   </form>
         </div>
 
-
     	<div class="result"></div>
+
+        <div class='signup'><a href='/join'>Sign up</a></div>
 
 
     	<script>
@@ -50,7 +51,7 @@
                         //resultDiv.innerHTML = "welcome, " + result.email + "!!";
                         window.location.href="/main";
                     }
-    				else if (xhr.status === 401) resultDiv.innerHTML = result + "<div class='signup'><a href='/join'>Sign up</a></div>";
+    				else if (xhr.status === 401) resultDiv.innerHTML = result;
                     else resultDiv.innerHTML = result;
                 
     			});
