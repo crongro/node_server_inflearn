@@ -19,7 +19,7 @@ nodemon app
 본 실습프로젝트는 mysql 연동을 하게 됩니다.
 여기서 확인하세요.
 
-https://gist.github.com/nigayo/4fc2c86ee92758e4a487093e932ef5b0
+https://gist.github.com/crongro/4fc2c86ee92758e4a487093e932ef5b0
 
 
 ---
